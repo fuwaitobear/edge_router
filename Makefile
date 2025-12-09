@@ -11,14 +11,15 @@ help:
 	@echo "  make login    - Login to Cloudflare"
 	@echo "  make logout   - Logout from Cloudflare"
 
+deploy:
+	act -W .github/workflows/deploy.yml \
+		--secret-file ./secrets
+		
 install:
 	npm install
 
 dev:
 	npm run dev
-
-deploy:
-	npm run deploy
 
 tail:
 	npx wrangler tail

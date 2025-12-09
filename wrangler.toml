@@ -1,6 +1,7 @@
-name = "edge-router"
+name = "edge_router"
 main = "src/index.js"
-compatibility_date = "2024-12-08"
+compatibility_date = "2024-12-24"
+route = "xdiff.net/*"
 
 [vars]
-TARGET_HOST = "example.com"
+TARGET_HOST = "xdiff.net"
