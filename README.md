@@ -3,7 +3,7 @@
 Cloudflare Worker for edge routing and proxying requests.
 
 * CloudflareのBuild機能によってデプロイします。
-* GitHubのmainブランチへのpushで自動デプロイされます。
+* GitHubのmainブランチへpush後、Cloudflare Web画面上からデプロイボタンでデプロイします。
 
 ```
 * 負荷軽減用ワーカー
