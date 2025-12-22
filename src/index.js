@@ -5,13 +5,47 @@
  */
 export default {
 	async fetch(request, env, ctx) {
+		const userAgent = request.headers.get('User-Agent') || '';
+
+		// Discord や X(Twitter) などの URL プレビュー用 Bot 判定
+		const previewBots = {
+			discordbot: /Discordbot/i,
+			twitterbot: /Twitterbot/i,
+			'slackbot-linkexpanding': /Slackbot-LinkExpanding/i,
+			facebookbot: /facebookexternalhit|Facebot/i,
+			linkedinbot: /LinkedInBot/i,
+			pinterestbot: /Pinterestbot/i,
+			telegrambot: /TelegramBot/i,
+		};
+
+		const detectPreviewBot = userAgent => {
+			for (const [botName, regex] of Object.entries(previewBots)) {
+				if (regex.test(userAgent)) {
+					return {
+						isBot: true,
+						botName,
+						userAgent,
+					};
+				}
+			}
+
+			return { isBot: false, userAgent };
+		};
+
+		const bot = detectPreviewBot(userAgent);
+
+		// プレビュー用 Bot からのリクエストは、そのままプロキシ
+		if (bot.isBot) {
+			return fetch(request);
+		}
+
 		// auth-keyクッキーの値の確認
 		const cookieHeader = request.headers.get('Cookie');
 		const authKey = cookieHeader
 			? cookieHeader
-				.split(';')
-				.find(c => c.trim().startsWith('authkey='))
-				?.split('=')[1]
+					.split(';')
+					.find(c => c.trim().startsWith('authkey='))
+					?.split('=')[1]
 			: null;
 
 		// クッキーが存在しない場合、404 HTMLを返却
