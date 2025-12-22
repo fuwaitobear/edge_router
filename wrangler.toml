@@ -1,4 +1,4 @@
-name = "edge_router"
+name = "edge-router"
 main = "src/index.js"
 compatibility_date = "2024-12-24"
 route = "xdiff.net/*"
