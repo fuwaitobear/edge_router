@@ -4,19 +4,19 @@
  * 想定しているリクエスト内容でなければ404を返します
  */
 export default {
-  async fetch(request, env, ctx) {
-    // auth-keyクッキーの値の確認
-    const cookieHeader = request.headers.get('Cookie');
-    const authKey = cookieHeader
-      ? cookieHeader
-        .split(';')
-        .find(c => c.trim().startsWith('authkey='))
-        ?.split('=')[1]
-      : null;
+	async fetch(request, env, ctx) {
+		// auth-keyクッキーの値の確認
+		const cookieHeader = request.headers.get('Cookie');
+		const authKey = cookieHeader
+			? cookieHeader
+				.split(';')
+				.find(c => c.trim().startsWith('authkey='))
+				?.split('=')[1]
+			: null;
 
-    // クッキーが存在しない場合、404 HTMLを返却
-    if (!authKey) {
-      const html404 = `
+		// クッキーが存在しない場合、404 HTMLを返却
+		if (!authKey) {
+			const html404 = `
 <!doctype html>
 <html lang="ja" data-theme="dark">
 	<head>
@@ -167,20 +167,23 @@ export default {
 			<div class="system-message">
 				リクエストを処理できませんでした<br />
 			</div>
+			<button id="reloadBtn" class="reload-btn" onclick="location.reload()"
+				>再読み込み</button
+			>
 		</div>
 	</body>
 </html>
 `;
 
-      return new Response(html404, {
-        status: 404,
-        headers: {
-          'Content-Type': 'text/html; charset=utf-8',
-        },
-      });
-    }
+			return new Response(html404, {
+				status: 404,
+				headers: {
+					'Content-Type': 'text/html; charset=utf-8',
+				},
+			});
+		}
 
-    // クッキーが存在する場合、リクエストをそのままプロキシ
-    return fetch(request);
-  },
+		// クッキーが存在する場合、リクエストをそのままプロキシ
+		return fetch(request);
+	},
 };
